@@ -2,6 +2,8 @@ import requests
 import json
 import os
 import time
+import glob
+
 
 CONFIG_FILE = os.path.join(os.path.expanduser(
     "~"), "Documents", "wallhaven_config.json")
@@ -59,6 +61,10 @@ while True:
     if data["purity"][2] == "1" and not os.path.exists(data["api_key_path"]):
         data["purity"][2] = "0"
     urls = get_images_url(data)[:data["image_count"]]
+    
+    for f in glob.glob(os.path.join(data["download_directory"], "*")):
+        os.remove(f)
+
     for i in range(len(urls)):
         print(urls[i])
         file = str(i) + "." + urls[i].split(".")[-1]
